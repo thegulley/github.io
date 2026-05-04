@@ -1,0 +1,592 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Why the 2031 Mars Route Looks Shorter</title>
+  <meta name="description" content="A simple explanation of the proposed 2031 fast-transfer Mars route, why it is shorter in time, and why it needs much more energy." />
+  <style>
+    :root {
+      --bg: #07111f;
+      --bg2: #0c1b2e;
+      --card: rgba(13, 29, 49, 0.86);
+      --line: rgba(255, 255, 255, 0.16);
+      --text: #f5f7fb;
+      --muted: #b9c6d8;
+      --blue: #67b7ff;
+      --orange: #ff8a3d;
+      --yellow: #ffd95a;
+      --green: #8fd694;
+      --purple: #c89bff;
+      --danger: #ff6b5e;
+      --shadow: 0 24px 80px rgba(0,0,0,.35);
+      --radius: 22px;
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      color: var(--text);
+      background:
+        radial-gradient(circle at 20% 5%, rgba(103,183,255,.22), transparent 26rem),
+        radial-gradient(circle at 90% 15%, rgba(200,155,255,.18), transparent 24rem),
+        radial-gradient(circle at 55% 80%, rgba(255,138,61,.12), transparent 26rem),
+        linear-gradient(180deg, #030914 0%, var(--bg) 42%, #030914 100%);
+      line-height: 1.55;
+    }
+
+    a { color: var(--blue); }
+
+    .stars {
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      opacity: .5;
+      background-image:
+        radial-gradient(#ffffff 1px, transparent 1px),
+        radial-gradient(#ffffff 1px, transparent 1px);
+      background-size: 70px 70px, 110px 110px;
+      background-position: 0 0, 35px 55px;
+      mask-image: linear-gradient(to bottom, black, transparent 90%);
+    }
+
+    .wrap {
+      width: min(1120px, calc(100% - 40px));
+      margin: 0 auto;
+      position: relative;
+      z-index: 1;
+    }
+
+    header {
+      padding: 72px 0 42px;
+      text-align: center;
+    }
+
+    .eyebrow {
+      display: inline-flex;
+      gap: 10px;
+      align-items: center;
+      padding: 8px 13px;
+      border: 1px solid var(--line);
+      border-radius: 999px;
+      background: rgba(255,255,255,.06);
+      color: var(--muted);
+      font-size: 14px;
+      margin-bottom: 22px;
+    }
+
+    .dot {
+      width: 9px;
+      height: 9px;
+      border-radius: 50%;
+      background: var(--green);
+      box-shadow: 0 0 20px var(--green);
+    }
+
+    h1 {
+      margin: 0 auto 18px;
+      max-width: 980px;
+      font-size: clamp(42px, 7vw, 82px);
+      line-height: .96;
+      letter-spacing: -0.06em;
+    }
+
+    .subtitle {
+      margin: 0 auto;
+      max-width: 800px;
+      color: var(--muted);
+      font-size: clamp(18px, 2.4vw, 24px);
+    }
+
+    .hero-grid {
+      display: grid;
+      grid-template-columns: 1.08fr .92fr;
+      gap: 22px;
+      align-items: stretch;
+      margin: 22px 0 30px;
+    }
+
+    .card {
+      background: linear-gradient(180deg, rgba(18,39,65,.92), rgba(9,21,37,.92));
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      padding: 26px;
+      overflow: hidden;
+    }
+
+    .summary-card {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+    }
+
+    h2 {
+      margin: 0 0 14px;
+      font-size: clamp(26px, 3vw, 38px);
+      letter-spacing: -0.035em;
+      line-height: 1.08;
+    }
+
+    h3 {
+      margin: 0 0 10px;
+      font-size: 22px;
+      letter-spacing: -0.02em;
+    }
+
+    p { margin: 0 0 14px; color: var(--muted); }
+
+    .lead {
+      font-size: 20px;
+      color: var(--text);
+    }
+
+    .callout {
+      margin-top: 18px;
+      padding: 18px;
+      border-radius: 18px;
+      border: 1px solid rgba(255,217,90,.35);
+      background: rgba(255,217,90,.08);
+      color: #fff3bd;
+      font-weight: 700;
+    }
+
+    .metric-row {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 12px;
+      margin-top: 20px;
+    }
+
+    .metric {
+      border: 1px solid var(--line);
+      border-radius: 18px;
+      padding: 16px;
+      background: rgba(255,255,255,.04);
+    }
+
+    .metric b {
+      display: block;
+      font-size: 26px;
+      color: var(--yellow);
+      margin-bottom: 2px;
+    }
+
+    .metric span {
+      color: var(--muted);
+      font-size: 14px;
+    }
+
+    .visual-card {
+      padding: 14px;
+    }
+
+    .visual-card img {
+      width: 100%;
+      display: block;
+      border-radius: 18px;
+      border: 1px solid rgba(255,255,255,.14);
+      background: #04101d;
+    }
+
+    section {
+      margin: 26px 0;
+    }
+
+    .two {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 22px;
+    }
+
+    .route-diagram {
+      display: grid;
+      gap: 14px;
+      margin-top: 18px;
+    }
+
+    .route {
+      border: 1px solid var(--line);
+      border-radius: 18px;
+      padding: 18px;
+      background: rgba(255,255,255,.04);
+    }
+
+    .route-title {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      margin-bottom: 12px;
+      font-weight: 800;
+      color: var(--text);
+    }
+
+    .tag {
+      font-size: 13px;
+      padding: 6px 9px;
+      border-radius: 999px;
+      background: rgba(255,255,255,.08);
+      color: var(--muted);
+      white-space: nowrap;
+    }
+
+    .orbit {
+      position: relative;
+      height: 180px;
+      border-radius: 18px;
+      background:
+        radial-gradient(circle at 50% 50%, rgba(255,217,90,.45) 0 18px, rgba(255,217,90,.12) 19px 38px, transparent 39px),
+        radial-gradient(ellipse at 50% 50%, transparent 0 34%, rgba(103,183,255,.8) 35% 36%, transparent 37%),
+        radial-gradient(ellipse at 50% 50%, transparent 0 55%, rgba(255,138,61,.8) 56% 57%, transparent 58%);
+      overflow: hidden;
+    }
+
+    .planet {
+      position: absolute;
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      display: grid;
+      place-items: center;
+      font-size: 19px;
+      font-weight: 900;
+      color: #06111f;
+    }
+
+    .earth { left: 12%; top: 45%; background: linear-gradient(135deg, #5bbcff, #8fd694); }
+    .mars { right: 12%; top: 45%; background: linear-gradient(135deg, #ff8a3d, #d65a36); }
+
+    .arc {
+      position: absolute;
+      inset: 28px 70px;
+      border-top: 4px dashed rgba(255,255,255,.9);
+      border-radius: 60% 60% 0 0;
+      transform: translateY(24px);
+    }
+
+    .fast-plane {
+      position: absolute;
+      left: -10%;
+      top: 42%;
+      width: 120%;
+      height: 44px;
+      transform: rotate(-13deg);
+      background: linear-gradient(90deg, transparent, rgba(200,155,255,.32), transparent);
+      border-top: 1px dashed rgba(200,155,255,.9);
+      border-bottom: 1px dashed rgba(200,155,255,.9);
+    }
+
+    .fast-line {
+      position: absolute;
+      left: 18%;
+      right: 14%;
+      top: 54%;
+      height: 5px;
+      background: linear-gradient(90deg, var(--yellow), var(--orange));
+      transform: rotate(-13deg);
+      border-radius: 999px;
+      box-shadow: 0 0 18px rgba(255,217,90,.45);
+    }
+
+    .list {
+      display: grid;
+      gap: 12px;
+      margin-top: 16px;
+    }
+
+    .item {
+      display: grid;
+      grid-template-columns: 34px 1fr;
+      gap: 12px;
+      align-items: start;
+    }
+
+    .num {
+      width: 34px;
+      height: 34px;
+      border-radius: 50%;
+      display: grid;
+      place-items: center;
+      background: rgba(103,183,255,.16);
+      color: var(--blue);
+      border: 1px solid rgba(103,183,255,.35);
+      font-weight: 900;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      overflow: hidden;
+      border-radius: 18px;
+      border-style: hidden;
+      box-shadow: 0 0 0 1px var(--line);
+      background: rgba(255,255,255,.035);
+      margin-top: 16px;
+    }
+
+    th, td {
+      padding: 15px;
+      border: 1px solid var(--line);
+      text-align: left;
+      vertical-align: top;
+    }
+
+    th {
+      color: var(--text);
+      background: rgba(255,255,255,.07);
+      font-size: 14px;
+      text-transform: uppercase;
+      letter-spacing: .08em;
+    }
+
+    td {
+      color: var(--muted);
+    }
+
+    td strong {
+      color: var(--text);
+    }
+
+    .orange { color: var(--orange); }
+    .blue { color: var(--blue); }
+    .yellow { color: var(--yellow); }
+    .green { color: var(--green); }
+    .purple { color: var(--purple); }
+
+    .timeline {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 14px;
+      margin-top: 18px;
+    }
+
+    .time {
+      padding: 18px;
+      border-radius: 18px;
+      border: 1px solid var(--line);
+      background: rgba(255,255,255,.04);
+    }
+
+    .time b {
+      display: block;
+      font-size: 30px;
+      line-height: 1;
+      margin: 8px 0 4px;
+      color: var(--yellow);
+    }
+
+    .note {
+      font-size: 14px;
+      color: var(--muted);
+      margin-top: 16px;
+    }
+
+    .sources {
+      display: grid;
+      gap: 10px;
+      padding-left: 18px;
+      color: var(--muted);
+    }
+
+    footer {
+      padding: 34px 0 60px;
+      color: var(--muted);
+      font-size: 14px;
+    }
+
+    @media (max-width: 880px) {
+      .hero-grid, .two, .timeline {
+        grid-template-columns: 1fr;
+      }
+
+      .metric-row {
+        grid-template-columns: 1fr;
+      }
+
+      header {
+        padding-top: 46px;
+      }
+
+      .wrap {
+        width: min(100% - 26px, 1120px);
+      }
+
+      th, td {
+        padding: 12px;
+        font-size: 14px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="stars" aria-hidden="true"></div>
+
+  <header class="wrap">
+    <div class="eyebrow"><span class="dot"></span> 2031 fast-transfer Mars concept</div>
+    <h1>Why the 2031 Mars Route Looks Shorter</h1>
+    <p class="subtitle">It is not a magic tunnel through space. It is a special Earth-Mars alignment that allows a much faster, much higher-energy trajectory.</p>
+  </header>
+
+  <main class="wrap">
+    <section class="hero-grid">
+      <div class="card summary-card">
+        <h2>Simple answer</h2>
+        <p class="lead">The proposed 2031 path is shorter in <strong>time</strong>, not necessarily shorter in physical distance.</p>
+        <p>A normal Mars transfer uses a low-energy arc around the Sun. The 2031 concept instead uses a faster heliocentric path inspired by the early orbital geometry of asteroid 2001 CA21.</p>
+        <p>That geometry lines up unusually well with Earth and Mars in 2031, reducing plane-change penalties and enabling very short transfer times.</p>
+        <div class="callout">The tradeoff: it spends much more energy to arrive much faster.</div>
+
+        <div class="metric-row" aria-label="Key timing comparison">
+          <div class="metric"><b>6-9 mo.</b><span>Typical one-way Mars trip</span></div>
+          <div class="metric"><b>56 days</b><span>2031 feasible case</span></div>
+          <div class="metric"><b>33 days</b><span>2031 extreme case</span></div>
+        </div>
+      </div>
+
+      <div class="card visual-card">
+        <img src="mars-2031-fast-transfer-infographic.png" alt="Infographic explaining the 2031 Mars fast-transfer route and delta-V tradeoffs" />
+      </div>
+    </section>
+
+    <section class="two">
+      <div class="card">
+        <h2>The usual route</h2>
+        <p>A Hohmann-style transfer is the classic low-energy way to move from Earth’s orbit to Mars’s orbit.</p>
+        <div class="route-diagram">
+          <div class="route">
+            <div class="route-title">Low-energy transfer <span class="tag">slower</span></div>
+            <div class="orbit" aria-label="Stylized Hohmann transfer orbit">
+              <div class="planet earth">E</div>
+              <div class="planet mars">M</div>
+              <div class="arc"></div>
+            </div>
+          </div>
+        </div>
+        <div class="list">
+          <div class="item"><div class="num">1</div><p>Uses a broad orbital arc around the Sun.</p></div>
+          <div class="item"><div class="num">2</div><p>Minimizes fuel compared with faster options.</p></div>
+          <div class="item"><div class="num">3</div><p>Typically takes months because the spacecraft coasts along an efficient path.</p></div>
+        </div>
+      </div>
+
+      <div class="card">
+        <h2>The 2031 concept</h2>
+        <p>The study uses the early orbital plane of asteroid 2001 CA21 as a template for finding fast Earth-Mars transfer corridors.</p>
+        <div class="route-diagram">
+          <div class="route">
+            <div class="route-title">CA21-inspired fast path <span class="tag">higher energy</span></div>
+            <div class="orbit" aria-label="Stylized 2031 fast-transfer corridor">
+              <div class="fast-plane"></div>
+              <div class="fast-line"></div>
+              <div class="planet earth">E</div>
+              <div class="planet mars">M</div>
+            </div>
+          </div>
+        </div>
+        <div class="list">
+          <div class="item"><div class="num">1</div><p>Uses a higher-speed path through heliocentric space.</p></div>
+          <div class="item"><div class="num">2</div><p>Works best in the 2031 Earth-Mars alignment.</p></div>
+          <div class="item"><div class="num">3</div><p>Reduces plane-change waste, but does not eliminate the energy cost.</p></div>
+        </div>
+      </div>
+    </section>
+
+    <section class="card">
+      <h2>Delta-V and propulsion summary</h2>
+      <p>The faster route is not cheaper. It demands far higher excess velocity and launch energy.</p>
+
+      <table>
+        <thead>
+          <tr>
+            <th>Measure</th>
+            <th class="blue">Typical Hohmann</th>
+            <th class="orange">2031 feasible fast path</th>
+            <th>Meaning</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><strong>Earth departure v∞</strong></td>
+            <td>~2.9 km/s</td>
+            <td>~16.9 km/s</td>
+            <td>Much faster departure from Earth’s sphere of influence.</td>
+          </tr>
+          <tr>
+            <td><strong>Mars arrival v∞</strong></td>
+            <td>~2.6 km/s</td>
+            <td>~16.6 km/s</td>
+            <td>Much harder Mars capture, braking, or aerocapture problem.</td>
+          </tr>
+          <tr>
+            <td><strong>Launch energy, C3</strong></td>
+            <td>~8.7 km²/s²</td>
+            <td>~286 km²/s²</td>
+            <td>About 33x higher launch-energy requirement.</td>
+          </tr>
+          <tr>
+            <td><strong>Practical implication</strong></td>
+            <td>Conventional chemical missions are more compatible.</td>
+            <td>Likely needs advanced mission design, staging, and/or aerocapture.</td>
+            <td>The 33-day extreme case is beyond current practical propulsion capability.</td>
+          </tr>
+        </tbody>
+      </table>
+
+      <div class="callout">Conclusion: the 2031 route cuts travel time by spending much more energy.</div>
+    </section>
+
+    <section class="two">
+      <div class="card">
+        <h2>Why 2031 matters</h2>
+        <p>Earth and Mars have launch opportunities roughly every 26 months, but not every window has the same geometry.</p>
+        <p>The study says 2031 is unusual because the Earth-Mars configuration lines up well with the CA21-derived orbital plane. That makes the fast path more coherent and reduces plane-change penalties.</p>
+      </div>
+
+      <div class="card">
+        <h2>What “shorter” really means</h2>
+        <p><strong class="yellow">Shorter in time:</strong> yes, because the spacecraft travels faster.</p>
+        <p><strong class="green">Shorter in distance:</strong> not the main point. Mars is not suddenly much closer.</p>
+        <p><strong class="orange">Cheaper in energy:</strong> no. The concept is a high-energy sprint.</p>
+      </div>
+    </section>
+
+    <section class="card">
+      <h2>Trip timeline comparison</h2>
+      <div class="timeline">
+        <div class="time">
+          <span>Typical one-way Mars transfer</span>
+          <b>~6-9 months</b>
+          <p>Lower energy, slower coast.</p>
+        </div>
+        <div class="time">
+          <span>2031 feasible case</span>
+          <b>56 days</b>
+          <p>Fast path, very high energy.</p>
+        </div>
+        <div class="time">
+          <span>2031 extreme case</span>
+          <b>33 days</b>
+          <p>Geometrically valid, propulsion impractical today.</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="card">
+      <h2>Sources</h2>
+      <ul class="sources">
+        <li><a href="https://www.sciencedirect.com/science/article/pii/S0094576526002456" target="_blank" rel="noreferrer">de Oliveira Souza, “Using Asteroid Early Orbital Data for Rapid Mars Missions,” Acta Astronautica, 2026</a></li>
+        <li><a href="https://www.preprints.org/manuscript/202510.1072/v2" target="_blank" rel="noreferrer">Preprint version: “Round-Trip Mars Missions in the 2031 Window”</a></li>
+        <li><a href="https://science.nasa.gov/learn/basics-of-space-flight/chapter4-1/" target="_blank" rel="noreferrer">NASA, Basics of Space Flight, Chapter 4: Trajectories</a></li>
+      </ul>
+      <p class="note">Values are rounded for clarity. The 2031 fast-path figures refer to the study’s feasible scenario, not the more extreme 33-day case.</p>
+    </section>
+  </main>
+
+  <footer class="wrap">
+    Built as a static HTML page for GitHub Pages. Upload this folder, or place the files at the root of a repository and enable GitHub Pages.
+  </footer>
+</body>
+</html>
