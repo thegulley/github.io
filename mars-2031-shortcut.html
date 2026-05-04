@@ -1,0 +1,1088 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>The 2031 Mars Shortcut</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300..900;1,9..144,300..900&family=JetBrains+Mono:wght@300;400;500;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #f5f0e8;
+    --bg-2: #fffdf8;
+    --ink: #141210;
+    --ink-dim: #52493d;
+    --rule: #d8d0c0;
+    --sun: #d4870a;
+    --earth: #2a7ab5;
+    --mars: #c0422a;
+    --hohmann: #1a9e94;
+    --shortcut: #d42050;
+    --accent: #c07810;
+    --diagram-bg: #0d1220;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    font-family: 'Fraunces', Georgia, serif;
+    background: var(--bg);
+    color: var(--ink);
+    line-height: 1.55;
+    overflow-x: hidden;
+  }
+
+  .container {
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 48px 24px 80px;
+  }
+
+  /* Header */
+  .header {
+    border-bottom: 1px solid var(--rule);
+    padding-bottom: 28px;
+    margin-bottom: 48px;
+  }
+
+  .eyebrow {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin-bottom: 18px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+
+  .eyebrow::before {
+    content: '';
+    width: 28px;
+    height: 1px;
+    background: var(--accent);
+  }
+
+  h1 {
+    font-family: 'Fraunces', serif;
+    font-weight: 300;
+    font-size: clamp(36px, 7vw, 68px);
+    line-height: 1.02;
+    letter-spacing: -0.02em;
+    margin-bottom: 20px;
+  }
+
+  h1 em {
+    font-style: italic;
+    color: var(--accent);
+    font-weight: 400;
+  }
+
+  .subtitle {
+    font-size: clamp(15px, 2.4vw, 18px);
+    color: var(--ink-dim);
+    max-width: 640px;
+    font-style: italic;
+  }
+
+  .meta {
+    margin-top: 24px;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    color: var(--ink-dim);
+    display: flex;
+    flex-wrap: wrap;
+    gap: 24px;
+  }
+
+  .meta span strong {
+    color: var(--ink);
+    font-weight: 500;
+  }
+
+  /* Section */
+  section {
+    margin-bottom: 72px;
+  }
+
+  .section-num {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    color: var(--ink-dim);
+    letter-spacing: 0.15em;
+    margin-bottom: 14px;
+  }
+
+  h2 {
+    font-family: 'Fraunces', serif;
+    font-weight: 400;
+    font-size: clamp(24px, 4vw, 34px);
+    letter-spacing: -0.01em;
+    margin-bottom: 16px;
+    line-height: 1.15;
+  }
+
+  p.lead {
+    font-size: 17px;
+    color: var(--ink);
+    max-width: 700px;
+    margin-bottom: 20px;
+  }
+
+  p.lead em { color: var(--accent); font-style: italic; }
+
+  /* Diagram cards */
+  .compare {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 24px;
+    margin-top: 32px;
+  }
+
+  @media (max-width: 760px) {
+    .compare { grid-template-columns: 1fr; }
+  }
+
+  .diagram {
+    background: var(--diagram-bg);
+    border: 1px solid #1e2a3a;
+    border-radius: 4px;
+    padding: 24px;
+    position: relative;
+    overflow: hidden;
+    color: #e8e4d8;
+  }
+
+  .diagram .diagram-label { color: #7a8090; }
+  .diagram .diagram-sub { color: #7a8090; }
+  .diagram .diagram-stat { border-top-color: #2a3448; }
+  .diagram .stat-label { color: #7a8090; }
+
+  .diagram::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0;
+    width: 24px; height: 24px;
+    border-top: 1px solid var(--accent);
+    border-left: 1px solid var(--accent);
+  }
+
+  .diagram::after {
+    content: '';
+    position: absolute;
+    bottom: 0; right: 0;
+    width: 24px; height: 24px;
+    border-bottom: 1px solid var(--accent);
+    border-right: 1px solid var(--accent);
+  }
+
+  .diagram-label {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.18em;
+    color: var(--ink-dim);
+    text-transform: uppercase;
+    margin-bottom: 4px;
+  }
+
+  .diagram-title {
+    font-family: 'Fraunces', serif;
+    font-size: 22px;
+    font-weight: 400;
+    margin-bottom: 6px;
+    color: #e8e4d8;
+  }
+
+  .diagram-title em { font-style: italic; }
+
+  .diagram-sub {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    color: var(--ink-dim);
+    margin-bottom: 18px;
+  }
+
+  .diagram svg {
+    width: 100%;
+    height: auto;
+    display: block;
+  }
+
+  .diagram-stat {
+    margin-top: 18px;
+    padding-top: 16px;
+    border-top: 1px dashed #2a3448;
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+  }
+
+  .stat-label {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    color: #7a8090;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+  }
+
+  .stat-value {
+    font-family: 'Fraunces', serif;
+    font-size: 28px;
+    font-weight: 300;
+    color: #e8e4d8;
+  }
+
+  .stat-value.hohmann em { color: #4ad4c4; font-style: normal; }
+  .stat-value.shortcut em { color: #ff5577; font-style: normal; }
+
+  /* Why 2031 panel */
+  .why {
+    margin-top: 48px;
+    background: var(--bg-2);
+    border: 1px solid var(--rule);
+    padding: 36px;
+    display: grid;
+    grid-template-columns: 1.1fr 1fr;
+    gap: 36px;
+    align-items: center;
+  }
+
+  @media (max-width: 760px) {
+    .why { grid-template-columns: 1fr; padding: 24px; gap: 24px; }
+  }
+
+  .why h3 {
+    font-family: 'Fraunces', serif;
+    font-weight: 400;
+    font-size: 26px;
+    margin-bottom: 14px;
+    line-height: 1.2;
+  }
+
+  .why h3 em { color: var(--accent); font-style: italic; }
+
+  .why p {
+    color: var(--ink);
+    font-size: 15px;
+    margin-bottom: 12px;
+  }
+
+  .why p:last-child { margin-bottom: 0; color: var(--ink-dim); }
+
+  .tilt-diagram {
+    width: 100%;
+    height: auto;
+  }
+
+  /* Timeline */
+  .timeline {
+    margin-top: 32px;
+    border: 1px solid var(--rule);
+    padding: 28px 24px;
+    background: var(--bg-2);
+  }
+
+  .timeline-title {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin-bottom: 24px;
+  }
+
+  .bar-row {
+    display: grid;
+    grid-template-columns: 110px 1fr 70px;
+    align-items: center;
+    gap: 14px;
+    margin-bottom: 14px;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 12px;
+  }
+
+  .bar-row:last-child { margin-bottom: 0; }
+
+  .bar-label { color: var(--ink); }
+  .bar-track { height: 10px; background: var(--rule); position: relative; }
+
+  .bar-fill {
+    height: 100%;
+    position: relative;
+    transition: width 1.2s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+
+  .bar-fill.hohmann { background: linear-gradient(90deg, var(--hohmann), rgba(26,158,148,0.5)); }
+  .bar-fill.feasible { background: linear-gradient(90deg, var(--mars), rgba(192,66,42,0.5)); }
+  .bar-fill.extreme { background: linear-gradient(90deg, var(--shortcut), rgba(212,32,80,0.5)); }
+
+  .bar-value {
+    color: var(--ink-dim);
+    text-align: right;
+    font-size: 11px;
+  }
+
+  .bar-value strong { color: var(--ink); font-weight: 500; }
+
+  /* Tradeoff */
+  .tradeoff {
+    margin-top: 56px;
+    border-top: 1px solid var(--rule);
+    padding-top: 28px;
+    display: grid;
+    grid-template-columns: 80px 1fr;
+    gap: 24px;
+  }
+
+  @media (max-width: 760px) {
+    .tradeoff { grid-template-columns: 1fr; gap: 12px; }
+  }
+
+  .tradeoff-marker {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.2em;
+    color: var(--shortcut);
+    padding-top: 4px;
+  }
+
+  .tradeoff p {
+    font-size: 16px;
+    color: var(--ink);
+    font-style: italic;
+  }
+
+  .tradeoff p strong { color: var(--accent); font-style: normal; font-weight: 600; }
+
+  /* Footer */
+  footer {
+    margin-top: 80px;
+    padding-top: 24px;
+    border-top: 1px solid var(--rule);
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    color: var(--ink-dim);
+    letter-spacing: 0.1em;
+    line-height: 1.8;
+  }
+
+  /* ΔV chart */
+  .dv-wrap {
+    margin-top: 32px;
+    background: var(--bg-2);
+    border: 1px solid var(--rule);
+    padding: 28px 28px 20px;
+  }
+
+  .dv-chart-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 28px;
+    flex-wrap: wrap;
+    gap: 12px;
+  }
+
+  .dv-chart-title {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--accent);
+  }
+
+  .dv-legend {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    color: var(--ink-dim);
+  }
+
+  .legend-dot { width: 10px; height: 10px; border-radius: 2px; display: inline-block; }
+  .leo-dot { background: #1a5a9e; }
+  .llo-dot { background: #9ab8d8; border: 1px solid #6090b8; }
+
+  .dv-scenario { margin-bottom: 20px; }
+  .dv-scenario:last-child { margin-bottom: 0; }
+
+  .dv-scenario-header {
+    display: flex;
+    align-items: baseline;
+    gap: 12px;
+    margin-bottom: 8px;
+    flex-wrap: wrap;
+  }
+
+  .dv-scenario-name {
+    font-family: 'Fraunces', serif;
+    font-size: 16px;
+    font-weight: 500;
+    color: var(--ink);
+  }
+
+  .dv-scenario-tag {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    padding: 2px 8px;
+    border-radius: 2px;
+    letter-spacing: 0.08em;
+  }
+
+  .hohmann-tag { background: rgba(26,158,148,0.12); color: var(--hohmann); border: 1px solid rgba(26,158,148,0.3); }
+  .shortcut-tag { background: rgba(212,32,80,0.1); color: var(--shortcut); border: 1px solid rgba(212,32,80,0.25); }
+  .extreme-tag { background: rgba(160,40,10,0.1); color: #a02808; border: 1px solid rgba(160,40,10,0.25); }
+
+  .dv-bar-group { display: flex; flex-direction: column; gap: 6px; }
+
+  .dv-bar-row {
+    display: grid;
+    grid-template-columns: 36px 1fr auto;
+    align-items: center;
+    gap: 10px;
+  }
+
+  .dv-origin {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    color: var(--ink-dim);
+    text-align: right;
+  }
+
+  .dv-track {
+    height: 22px;
+    background: rgba(0,0,0,0.05);
+    border-radius: 2px;
+    position: relative;
+    overflow: visible;
+  }
+
+  .dv-fill {
+    height: 100%;
+    border-radius: 2px;
+    position: relative;
+    display: flex;
+    align-items: center;
+    min-width: 2px;
+    transition: width 1.4s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+
+  .dv-leo { background: #1a5a9e; }
+  .dv-llo { background: #9ab8d8; }
+  .dv-shortcut-fill { background: var(--shortcut); }
+  .dv-shortcut-fill-llo { background: rgba(212,32,80,0.45); border: 1px solid rgba(212,32,80,0.5); }
+  .dv-extreme-fill { background: #7a1206; }
+  .dv-extreme-fill-llo { background: rgba(122,18,6,0.4); border: 1px solid rgba(122,18,6,0.5); }
+
+  .dv-val {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    font-weight: 700;
+    color: #fff;
+    padding-left: 6px;
+    white-space: nowrap;
+  }
+
+  .dv-val.outside {
+    position: absolute;
+    left: calc(100% + 6px);
+    color: var(--ink);
+  }
+
+  .dv-saving {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    color: #1a7a50;
+    white-space: nowrap;
+  }
+
+  .dv-penalty {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    color: #b03010;
+    white-space: nowrap;
+  }
+
+  .dv-scale-label {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 9px;
+    color: var(--ink-dim);
+    margin-top: 8px;
+    padding-left: 46px;
+  }
+
+  .dv-divider {
+    height: 1px;
+    background: var(--rule);
+    margin: 18px 0;
+  }
+
+  /* Oberth callout */
+  .oberth-box {
+    margin-top: 24px;
+    background: rgba(192,120,16,0.06);
+    border-left: 3px solid var(--accent);
+    padding: 18px 20px;
+    display: flex;
+    gap: 16px;
+    align-items: flex-start;
+    font-size: 14px;
+    color: var(--ink);
+    line-height: 1.65;
+  }
+
+  .oberth-icon { font-size: 20px; line-height: 1; padding-top: 2px; flex-shrink: 0; }
+  .oberth-box strong { font-weight: 600; }
+
+  /* Propulsion cards */
+  .prop-header {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin-top: 36px;
+    margin-bottom: 16px;
+  }
+
+  .prop-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 16px;
+  }
+
+  @media (max-width: 760px) {
+    .prop-grid { grid-template-columns: 1fr; }
+    .dv-saving, .dv-penalty { display: none; }
+    .dv-bar-row { grid-template-columns: 36px 1fr; }
+  }
+
+  .prop-card {
+    background: var(--bg-2);
+    border: 1px solid var(--rule);
+    padding: 20px;
+  }
+
+  .prop-chem { border-top: 3px solid var(--hohmann); }
+  .prop-ntp  { border-top: 3px solid var(--shortcut); }
+  .prop-adv  { border-top: 3px solid var(--accent); }
+
+  .prop-card-top {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    margin-bottom: 4px;
+  }
+
+  .prop-name {
+    font-family: 'Fraunces', serif;
+    font-size: 18px;
+    font-weight: 500;
+    color: var(--ink);
+  }
+
+  .prop-isp {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    color: var(--ink-dim);
+  }
+
+  .prop-engine {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    color: var(--ink-dim);
+    margin-bottom: 14px;
+    letter-spacing: 0.06em;
+  }
+
+  .prop-can { display: flex; flex-direction: column; gap: 5px; margin-bottom: 14px; }
+
+  .prop-row {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    padding: 4px 8px;
+    border-radius: 2px;
+  }
+
+  .prop-row.can { background: rgba(26,120,70,0.1); color: #1a5e38; }
+  .prop-row.cannot { background: rgba(0,0,0,0.04); color: #aaa; text-decoration: line-through; }
+
+  .prop-note {
+    font-size: 12px;
+    color: var(--ink-dim);
+    line-height: 1.5;
+    border-top: 1px dashed var(--rule);
+    padding-top: 10px;
+    font-style: italic;
+  }
+
+  /* SVG path animations */
+  @keyframes drawPath {
+    from { stroke-dashoffset: var(--len); }
+    to { stroke-dashoffset: 0; }
+  }
+
+  .path-anim {
+    stroke-dasharray: var(--len);
+    stroke-dashoffset: var(--len);
+    animation: drawPath 2.5s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+  }
+
+  .path-anim.delay { animation-delay: 0.4s; }
+
+  @keyframes pulse {
+    0%, 100% { opacity: 0.9; }
+    50% { opacity: 0.4; }
+  }
+
+  .planet-pulse { animation: pulse 3s ease-in-out infinite; }
+
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(12px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  .header, section, .why, .timeline, .tradeoff {
+    animation: fadeUp 0.8s ease-out backwards;
+  }
+
+  section:nth-child(2) { animation-delay: 0.1s; }
+  section:nth-child(3) { animation-delay: 0.2s; }
+
+</style>
+</head>
+<body>
+<div class="container">
+
+  <header class="header">
+    <div class="eyebrow">Acta Astronautica · 2026 · Souza</div>
+    <h1>The hidden <em>shortcut</em> to Mars, opening April 2031.</h1>
+    <p class="subtitle">A trajectory analysis using asteroid 2001 CA21's tilted orbital plane reveals a 153-day round-trip — when conventional missions take nearly two years.</p>
+    <div class="meta">
+      <span><strong>Departure window</strong> &nbsp;Apr 20, 2031</span>
+      <span><strong>Outbound</strong> &nbsp;33–56 days</span>
+      <span><strong>Return</strong> &nbsp;90–135 days</span>
+      <span><strong>Reference plane</strong> &nbsp;CA21 ± 5°</span>
+    </div>
+  </header>
+
+  <!-- COMPARISON SECTION -->
+  <section>
+    <div class="section-num">01 · THE GEOMETRY</div>
+    <h2>The long way around versus the chord across.</h2>
+    <p class="lead">A standard <em>Hohmann transfer</em> swings nearly half-way around the Sun. The 2031 trajectory cuts a more direct path — possible only because Mars sits near opposition <em>and</em> the tilted reference plane lines up.</p>
+
+    <div class="compare">
+
+      <!-- HOHMANN DIAGRAM -->
+      <div class="diagram">
+        <div class="diagram-label">Reference path</div>
+        <div class="diagram-title">Hohmann <em>transfer</em></div>
+        <div class="diagram-sub">// minimum-energy ellipse, ~180° around Sun</div>
+
+        <svg viewBox="0 0 400 400" xmlns="http://www.w3.org/2000/svg">
+          <defs>
+            <radialGradient id="sunGrad1" cx="50%" cy="50%">
+              <stop offset="0%" stop-color="#fff5d4" />
+              <stop offset="40%" stop-color="#f4b942" />
+              <stop offset="100%" stop-color="#a06b1a" />
+            </radialGradient>
+            <radialGradient id="sunGlow1" cx="50%" cy="50%">
+              <stop offset="0%" stop-color="#f4b942" stop-opacity="0.4" />
+              <stop offset="100%" stop-color="#f4b942" stop-opacity="0" />
+            </radialGradient>
+            <filter id="glow1">
+              <feGaussianBlur stdDeviation="2.5" result="b"/>
+              <feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge>
+            </filter>
+          </defs>
+
+          <!-- Sun glow -->
+          <circle cx="200" cy="200" r="60" fill="url(#sunGlow1)"/>
+
+          <!-- Earth orbit -->
+          <circle cx="200" cy="200" r="100" fill="none" stroke="#6ba8d4" stroke-opacity="0.35" stroke-width="0.8" stroke-dasharray="2 3"/>
+          <!-- Mars orbit -->
+          <circle cx="200" cy="200" r="152" fill="none" stroke="#d4644a" stroke-opacity="0.35" stroke-width="0.8" stroke-dasharray="2 3"/>
+
+          <!-- Hohmann transfer ellipse: from (300,200) to (48,200), passing through perihelion at Earth orbit -->
+          <!-- Ellipse with a=126 (avg of 100 and 152), centered between, half-ellipse -->
+          <!-- Starts at Earth (300,200), ends opposite at Mars distance (48,200) -->
+          <path d="M 300 200 A 126 126 0 0 0 48 200"
+                fill="none" stroke="#4ad4c4" stroke-width="2.2"
+                filter="url(#glow1)"
+                class="path-anim" style="--len: 600;"/>
+
+          <!-- Sun -->
+          <circle cx="200" cy="200" r="11" fill="url(#sunGrad1)"/>
+
+          <!-- Earth at launch (right side) -->
+          <circle cx="300" cy="200" r="6" fill="#6ba8d4" class="planet-pulse"/>
+          <circle cx="300" cy="200" r="11" fill="none" stroke="#6ba8d4" stroke-opacity="0.3" stroke-width="1"/>
+
+          <!-- Mars at launch (ahead, ~45°) -->
+          <circle cx="307.5" cy="92.5" r="5.5" fill="#d4644a" fill-opacity="0.45"/>
+          <text x="320" y="92" font-family="JetBrains Mono" font-size="9" fill="#8b8674">Mars at launch</text>
+
+          <!-- Mars at arrival (left side, opposite) -->
+          <circle cx="48" cy="200" r="5.5" fill="#d4644a" class="planet-pulse"/>
+
+          <!-- Labels -->
+          <text x="305" y="220" font-family="JetBrains Mono" font-size="10" fill="#6ba8d4">Earth</text>
+          <text x="20" y="195" font-family="JetBrains Mono" font-size="10" fill="#d4644a">Mars</text>
+          <text x="20" y="208" font-family="JetBrains Mono" font-size="9" fill="#8b8674">at arrival</text>
+          <text x="207" y="195" font-family="JetBrains Mono" font-size="9" fill="#f4b942">Sun</text>
+
+          <!-- Path label -->
+          <text x="200" y="345" font-family="JetBrains Mono" font-size="10" fill="#4ad4c4" text-anchor="middle">~ 7–9 MONTHS</text>
+        </svg>
+
+        <div class="diagram-stat">
+          <span class="stat-label">One-way duration</span>
+          <span class="stat-value hohmann"><em>~259</em> days</span>
+        </div>
+      </div>
+
+      <!-- 2031 SHORTCUT DIAGRAM -->
+      <div class="diagram">
+        <div class="diagram-label">2031 window · Souza</div>
+        <div class="diagram-title">CA21-plane <em>shortcut</em></div>
+        <div class="diagram-sub">// short-way Lambert transfer, near opposition</div>
+
+        <svg viewBox="0 0 400 400" xmlns="http://www.w3.org/2000/svg">
+          <defs>
+            <radialGradient id="sunGrad2" cx="50%" cy="50%">
+              <stop offset="0%" stop-color="#fff5d4" />
+              <stop offset="40%" stop-color="#f4b942" />
+              <stop offset="100%" stop-color="#a06b1a" />
+            </radialGradient>
+            <radialGradient id="sunGlow2" cx="50%" cy="50%">
+              <stop offset="0%" stop-color="#f4b942" stop-opacity="0.4" />
+              <stop offset="100%" stop-color="#f4b942" stop-opacity="0" />
+            </radialGradient>
+            <filter id="glow2">
+              <feGaussianBlur stdDeviation="2.5" result="b"/>
+              <feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge>
+            </filter>
+          </defs>
+
+          <!-- Sun glow -->
+          <circle cx="200" cy="200" r="60" fill="url(#sunGlow2)"/>
+
+          <!-- Earth orbit -->
+          <circle cx="200" cy="200" r="100" fill="none" stroke="#6ba8d4" stroke-opacity="0.35" stroke-width="0.8" stroke-dasharray="2 3"/>
+          <!-- Mars orbit -->
+          <circle cx="200" cy="200" r="152" fill="none" stroke="#d4644a" stroke-opacity="0.35" stroke-width="0.8" stroke-dasharray="2 3"/>
+
+          <!-- Subtle indication of CA21 inclined plane (oval to suggest tilt) -->
+          <ellipse cx="200" cy="200" rx="152" ry="148" fill="none" stroke="#f4b942" stroke-opacity="0.15" stroke-width="0.6" stroke-dasharray="1 4" transform="rotate(8 200 200)"/>
+
+          <!-- Outbound path: short curving arc from Earth to Mars (near opposition) -->
+          <!-- Earth at (300,200), Mars near opposition at (348, 178) - just outside Earth on outer orbit -->
+          <path d="M 300 200 Q 320 170 348 178"
+                fill="none" stroke="#ff5577" stroke-width="2.5"
+                filter="url(#glow2)"
+                class="path-anim" style="--len: 90;"/>
+
+          <!-- Return path: slight curve back, slightly different (faded) -->
+          <path d="M 348 178 Q 290 245 300 200"
+                fill="none" stroke="#ff5577" stroke-opacity="0.45" stroke-width="2"
+                stroke-dasharray="3 3"
+                filter="url(#glow2)"
+                class="path-anim delay" style="--len: 200;"/>
+
+          <!-- Sun -->
+          <circle cx="200" cy="200" r="11" fill="url(#sunGrad2)"/>
+
+          <!-- Earth at launch -->
+          <circle cx="300" cy="200" r="6" fill="#6ba8d4" class="planet-pulse"/>
+          <circle cx="300" cy="200" r="11" fill="none" stroke="#6ba8d4" stroke-opacity="0.3" stroke-width="1"/>
+
+          <!-- Mars at arrival (near opposition - close to Earth, on outer orbit) -->
+          <circle cx="348" cy="178" r="5.5" fill="#d4644a" class="planet-pulse"/>
+
+          <!-- Labels -->
+          <text x="280" y="220" font-family="JetBrains Mono" font-size="10" fill="#6ba8d4">Earth</text>
+          <text x="338" y="165" font-family="JetBrains Mono" font-size="10" fill="#d4644a">Mars</text>
+          <text x="207" y="195" font-family="JetBrains Mono" font-size="9" fill="#f4b942">Sun</text>
+
+          <!-- Outbound label -->
+          <text x="335" y="155" font-family="JetBrains Mono" font-size="9" fill="#ff5577">33d ↗</text>
+          <!-- Return label -->
+          <text x="280" y="265" font-family="JetBrains Mono" font-size="9" fill="#ff5577" fill-opacity="0.7">↙ 90d return</text>
+
+          <!-- Annotation: opposition geometry -->
+          <line x1="200" y1="200" x2="348" y2="178" stroke="#f4b942" stroke-opacity="0.2" stroke-width="0.5" stroke-dasharray="1 3"/>
+          <text x="200" y="345" font-family="JetBrains Mono" font-size="10" fill="#ff5577" text-anchor="middle">~ 33–56 DAYS</text>
+        </svg>
+
+        <div class="diagram-stat">
+          <span class="stat-label">One-way duration</span>
+          <span class="stat-value shortcut"><em>33–56</em> days</span>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- WHY 2031 -->
+  <section>
+    <div class="section-num">02 · WHY 2031</div>
+    <h2>The asteroid plane that closes the loop.</h2>
+
+    <div class="why">
+      <div>
+        <h3>A 5° tilt becomes a <em>filter</em>.</h3>
+        <p>Souza took the early 2015 predicted orbit of asteroid 2001 CA21 — highly eccentric, with a well-defined inclined plane — and treated it as a geometric template. He searched only for trajectories within ±5° of that plane.</p>
+        <p>Tested against Mars oppositions in <strong style="color:var(--ink-dim)">2027</strong>, <strong style="color:var(--ink-dim)">2029</strong>, and <strong style="color:var(--accent)">2031</strong>, only the 2031 alignment produced trajectories that close into a complete round trip. The other windows either spike in energy demand or fail to return.</p>
+      </div>
+
+      <svg class="tilt-diagram" viewBox="0 0 400 240" xmlns="http://www.w3.org/2000/svg">
+        <defs>
+          <linearGradient id="planeGrad" x1="0%" y1="0%" x2="100%" y2="0%">
+            <stop offset="0%" stop-color="#6ba8d4" stop-opacity="0.15"/>
+            <stop offset="100%" stop-color="#6ba8d4" stop-opacity="0.05"/>
+          </linearGradient>
+          <linearGradient id="ca21Grad" x1="0%" y1="0%" x2="100%" y2="0%">
+            <stop offset="0%" stop-color="#f4b942" stop-opacity="0.25"/>
+            <stop offset="100%" stop-color="#f4b942" stop-opacity="0.08"/>
+          </linearGradient>
+        </defs>
+
+        <!-- Ecliptic plane (flat) -->
+        <ellipse cx="200" cy="135" rx="170" ry="20" fill="url(#planeGrad)" stroke="#6ba8d4" stroke-opacity="0.5" stroke-width="0.8" stroke-dasharray="2 3"/>
+        <text x="30" y="172" font-family="JetBrains Mono" font-size="10" fill="#6ba8d4">Ecliptic / Earth–Mars plane</text>
+
+        <!-- CA21 plane (tilted) -->
+        <g transform="rotate(-6 200 135)">
+          <ellipse cx="200" cy="135" rx="170" ry="20" fill="url(#ca21Grad)" stroke="#f4b942" stroke-opacity="0.7" stroke-width="0.8" stroke-dasharray="2 3"/>
+        </g>
+        <text x="240" y="80" font-family="JetBrains Mono" font-size="10" fill="#f4b942">CA21 plane (~5° tilt)</text>
+
+        <!-- Tilt indicator -->
+        <path d="M 360 135 A 30 30 0 0 0 358 105" fill="none" stroke="#f4b942" stroke-opacity="0.5" stroke-width="0.6"/>
+        <text x="335" y="115" font-family="JetBrains Mono" font-size="9" fill="#f4b942">5°</text>
+
+        <!-- Sun -->
+        <circle cx="200" cy="135" r="9" fill="url(#sunGrad1)"/>
+
+        <!-- Earth -->
+        <circle cx="105" cy="135" r="4" fill="#6ba8d4"/>
+        <text x="84" y="155" font-family="JetBrains Mono" font-size="9" fill="#6ba8d4">Earth</text>
+
+        <!-- Mars -->
+        <circle cx="316" cy="113" r="4" fill="#d4644a"/>
+        <text x="305" y="103" font-family="JetBrains Mono" font-size="9" fill="#d4644a">Mars</text>
+
+        <!-- Trajectory through tilted plane -->
+        <path d="M 105 135 Q 200 100 316 113" fill="none" stroke="#ff5577" stroke-width="2"
+              filter="url(#glow1)"
+              class="path-anim" style="--len: 240;"/>
+
+        <text x="200" y="220" font-family="JetBrains Mono" font-size="9" fill="#8b8674" text-anchor="middle">// trajectory constrained to ±5° of CA21 plane</text>
+      </svg>
+    </div>
+
+    <!-- Timeline comparison -->
+    <div class="timeline">
+      <div class="timeline-title">Round-trip duration · scaled comparison</div>
+
+      <div class="bar-row">
+        <span class="bar-label">Conventional</span>
+        <div class="bar-track"><div class="bar-fill hohmann" style="width: 100%"></div></div>
+        <span class="bar-value"><strong>~900</strong>d</span>
+      </div>
+
+      <div class="bar-row">
+        <span class="bar-label">2031 feasible</span>
+        <div class="bar-track"><div class="bar-fill feasible" style="width: 25.1%"></div></div>
+        <span class="bar-value"><strong>226</strong>d</span>
+      </div>
+
+      <div class="bar-row">
+        <span class="bar-label">2031 extreme</span>
+        <div class="bar-track"><div class="bar-fill extreme" style="width: 17%"></div></div>
+        <span class="bar-value"><strong>153</strong>d</span>
+      </div>
+    </div>
+
+  </section>
+
+  <!-- DELTA-V ANALYSIS -->
+  <section>
+    <div class="section-num">03 · DELTA-V &amp; PROPULSION</div>
+    <h2>The price of speed — and where you depart from.</h2>
+    <p class="lead">The shortcut trades enormous fuel cost for time. And counterintuitively, <em>lunar departure makes things worse</em> for the high-energy cases — a consequence of the Oberth effect.</p>
+
+    <!-- ΔV bar chart -->
+    <div class="dv-wrap">
+      <div class="dv-chart-block">
+        <div class="dv-chart-header">
+          <span class="dv-chart-title">Departure ΔV from each staging point (km/s)</span>
+          <div class="dv-legend">
+            <span class="legend-dot leo-dot"></span><span>From LEO</span>
+            <span class="legend-dot llo-dot"></span><span>From LLO (Moon)</span>
+          </div>
+        </div>
+
+        <!-- Scenario 1: Hohmann -->
+        <div class="dv-scenario">
+          <div class="dv-scenario-header">
+            <span class="dv-scenario-name">Hohmann transfer</span>
+            <span class="dv-scenario-tag hohmann-tag">baseline · ~259 days</span>
+          </div>
+          <div class="dv-bar-group">
+            <div class="dv-bar-row">
+              <span class="dv-origin">LEO</span>
+              <div class="dv-track">
+                <div class="dv-fill dv-leo" style="width:14.4%">
+                  <span class="dv-val">3.6</span>
+                </div>
+              </div>
+            </div>
+            <div class="dv-bar-row">
+              <span class="dv-origin">LLO</span>
+              <div class="dv-track">
+                <div class="dv-fill dv-llo" style="width:5.2%">
+                  <span class="dv-val outside">1.3</span>
+                </div>
+              </div>
+              <span class="dv-saving">↓ LLO saves 2.3 km/s</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="dv-divider"></div>
+
+        <!-- Scenario 2: 56-day -->
+        <div class="dv-scenario">
+          <div class="dv-scenario-header">
+            <span class="dv-scenario-name">56-day feasible shortcut</span>
+            <span class="dv-scenario-tag shortcut-tag">v∞ ≈ 16.9 km/s · NTP required</span>
+          </div>
+          <div class="dv-bar-group">
+            <div class="dv-bar-row">
+              <span class="dv-origin">LEO</span>
+              <div class="dv-track">
+                <div class="dv-fill dv-leo dv-shortcut-fill" style="width:49.6%">
+                  <span class="dv-val">12.4</span>
+                </div>
+              </div>
+            </div>
+            <div class="dv-bar-row">
+              <span class="dv-origin">LLO</span>
+              <div class="dv-track">
+                <div class="dv-fill dv-llo dv-shortcut-fill-llo" style="width:57.6%">
+                  <span class="dv-val">14.4</span>
+                </div>
+              </div>
+              <span class="dv-penalty">↑ LLO costs +2.0 km/s more</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="dv-divider"></div>
+
+        <!-- Scenario 3: 33-day -->
+        <div class="dv-scenario">
+          <div class="dv-scenario-header">
+            <span class="dv-scenario-name">33-day extreme shortcut</span>
+            <span class="dv-scenario-tag extreme-tag">C3 ≈ 758 km²/s² · beyond current tech</span>
+          </div>
+          <div class="dv-bar-group">
+            <div class="dv-bar-row">
+              <span class="dv-origin">LEO</span>
+              <div class="dv-track">
+                <div class="dv-fill dv-leo dv-extreme-fill" style="width:87.6%">
+                  <span class="dv-val">21.9</span>
+                </div>
+              </div>
+            </div>
+            <div class="dv-bar-row">
+              <span class="dv-origin">LLO</span>
+              <div class="dv-track">
+                <div class="dv-fill dv-llo dv-extreme-fill-llo" style="width:100%">
+                  <span class="dv-val">25.0</span>
+                </div>
+              </div>
+              <span class="dv-penalty">↑ LLO costs +3.1 km/s more</span>
+            </div>
+          </div>
+          <div class="dv-scale-label">0 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 5 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 10 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 15 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 20 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 25 km/s</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Oberth callout -->
+    <div class="oberth-box">
+      <div class="oberth-icon">⚡</div>
+      <div>
+        <strong>Why the Moon makes high-energy departures worse: the Oberth effect.</strong>
+        For slow Hohmann transfers, the Moon's shallow gravity well is a gift — you're already mostly free of Earth. But for the 2031 shortcut's extreme velocities, burning deep in Earth's gravity well at high speed (LEO) converts fuel into kinetic energy far more efficiently. The higher the required v∞, the bigger the LEO advantage — up to 3+ km/s for the extreme case. Lunar staging only helps if propellant can be sourced from the Moon to offset the penalty.
+      </div>
+    </div>
+
+    <!-- Propulsion systems -->
+    <div class="prop-header">Propulsion capability match</div>
+    <div class="prop-grid">
+
+      <div class="prop-card prop-chem">
+        <div class="prop-card-top">
+          <div class="prop-name">Chemical</div>
+          <div class="prop-isp">Isp ~450 s</div>
+        </div>
+        <div class="prop-engine">LH₂/LOX · e.g. RL-10, J-2X</div>
+        <div class="prop-can">
+          <div class="prop-row can">✓ Hohmann transfer</div>
+          <div class="prop-row cannot">✗ 56-day shortcut</div>
+          <div class="prop-row cannot">✗ 33-day extreme</div>
+        </div>
+        <div class="prop-note">Mass ratio becomes untenable above ~4–5 km/s departure ΔV</div>
+      </div>
+
+      <div class="prop-card prop-ntp">
+        <div class="prop-card-top">
+          <div class="prop-name">Nuclear Thermal</div>
+          <div class="prop-isp">Isp ~900 s</div>
+        </div>
+        <div class="prop-engine">NTP · e.g. NERVA heritage, DRACO</div>
+        <div class="prop-can">
+          <div class="prop-row can">✓ Hohmann transfer</div>
+          <div class="prop-row can">✓ 56-day feasible shortcut</div>
+          <div class="prop-row cannot">✗ 33-day extreme</div>
+        </div>
+        <div class="prop-note">Halves propellant mass vs chemical. Under development by DARPA/NASA. Must stage from high lunar orbit.</div>
+      </div>
+
+      <div class="prop-card prop-adv">
+        <div class="prop-card-top">
+          <div class="prop-name">Advanced / Future</div>
+          <div class="prop-isp">Isp &gt;1500 s</div>
+        </div>
+        <div class="prop-engine">NTP+NEP hybrid · fusion · laser sail</div>
+        <div class="prop-can">
+          <div class="prop-row can">✓ Hohmann transfer</div>
+          <div class="prop-row can">✓ 56-day feasible shortcut</div>
+          <div class="prop-row can">✓ 33-day extreme (theoretical)</div>
+        </div>
+        <div class="prop-note">Souza explicitly notes the 33-day case illustrates "what future high-specific-impulse systems could achieve."</div>
+      </div>
+
+    </div>
+
+  </section>
+
+  <footer>
+    SOURCE · Souza, M. de O. (2026). "Using asteroid early orbital data for rapid Mars missions." <em>Acta Astronautica.</em> DOI: 10.1016/j.actaastro.2026.04.018 &nbsp;·&nbsp;
+    ΔV values for LEO/LLO departure computed from patched-conic approximation using paper's published v∞ figures &nbsp;·&nbsp;
+    DIAGRAMS ARE SCHEMATIC · Distances and angles compressed for clarity.
+  </footer>
+
+</div>
+</body>
+</html>
