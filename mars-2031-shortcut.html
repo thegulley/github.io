@@ -375,14 +375,14 @@
     margin-top: 32px;
     background: var(--bg-2);
     border: 1px solid var(--rule);
-    padding: 28px 28px 20px;
+    padding: 28px 28px 24px;
   }
 
   .dv-chart-header {
     display: flex;
     justify-content: space-between;
-    align-items: center;
-    margin-bottom: 28px;
+    align-items: flex-start;
+    margin-bottom: 20px;
     flex-wrap: wrap;
     gap: 12px;
   }
@@ -393,6 +393,15 @@
     letter-spacing: 0.18em;
     text-transform: uppercase;
     color: var(--accent);
+    display: block;
+    margin-bottom: 4px;
+  }
+
+  .dv-axis-note {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    color: var(--ink-dim);
+    letter-spacing: 0.05em;
   }
 
   .dv-legend {
@@ -402,11 +411,32 @@
     font-family: 'JetBrains Mono', monospace;
     font-size: 11px;
     color: var(--ink-dim);
+    padding-top: 2px;
   }
 
   .legend-dot { width: 10px; height: 10px; border-radius: 2px; display: inline-block; }
   .leo-dot { background: #1a5a9e; }
-  .llo-dot { background: #9ab8d8; border: 1px solid #6090b8; }
+  .llo-dot { background: #7ab0d8; border: 1px solid #4a80b8; }
+
+  /* tick labels above bars */
+  .dv-grid-wrap { position: relative; }
+
+  .dv-ticks {
+    position: relative;
+    height: 18px;
+    margin-left: 46px;
+    margin-bottom: 6px;
+  }
+
+  .dv-ticks span {
+    position: absolute;
+    transform: translateX(-50%);
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 9px;
+    color: var(--ink-dim);
+  }
+
+  .dv-ticks span:last-child { transform: translateX(-100%); }
 
   .dv-scenario { margin-bottom: 20px; }
   .dv-scenario:last-child { margin-bottom: 0; }
@@ -436,9 +466,9 @@
 
   .hohmann-tag { background: rgba(26,158,148,0.12); color: var(--hohmann); border: 1px solid rgba(26,158,148,0.3); }
   .shortcut-tag { background: rgba(212,32,80,0.1); color: var(--shortcut); border: 1px solid rgba(212,32,80,0.25); }
-  .extreme-tag { background: rgba(160,40,10,0.1); color: #a02808; border: 1px solid rgba(160,40,10,0.25); }
+  .extreme-tag { background: rgba(140,30,10,0.1); color: #8c1e0a; border: 1px solid rgba(140,30,10,0.25); }
 
-  .dv-bar-group { display: flex; flex-direction: column; gap: 6px; }
+  .dv-bar-group { display: flex; flex-direction: column; gap: 7px; }
 
   .dv-bar-row {
     display: grid;
@@ -455,11 +485,20 @@
   }
 
   .dv-track {
-    height: 22px;
-    background: rgba(0,0,0,0.05);
+    height: 24px;
+    background: rgba(0,0,0,0.06);
     border-radius: 2px;
     position: relative;
-    overflow: visible;
+    overflow: hidden;
+  }
+
+  /* grid lines inside track */
+  .dv-grid-line {
+    position: absolute;
+    top: 0; bottom: 0;
+    width: 1px;
+    background: rgba(255,255,255,0.6);
+    z-index: 1;
   }
 
   .dv-fill {
@@ -468,27 +507,34 @@
     position: relative;
     display: flex;
     align-items: center;
-    min-width: 2px;
-    transition: width 1.4s cubic-bezier(0.4, 0, 0.2, 1);
+    z-index: 2;
   }
 
-  .dv-leo { background: #1a5a9e; }
-  .dv-llo { background: #9ab8d8; }
-  .dv-shortcut-fill { background: var(--shortcut); }
-  .dv-shortcut-fill-llo { background: rgba(212,32,80,0.45); border: 1px solid rgba(212,32,80,0.5); }
-  .dv-extreme-fill { background: #7a1206; }
-  .dv-extreme-fill-llo { background: rgba(122,18,6,0.4); border: 1px solid rgba(122,18,6,0.5); }
+  /* Hohmann – blue tones */
+  .dv-fill-leo-hoh { background: #1a5a9e; }
+  .dv-fill-llo-hoh { background: #7ab0d8; }
+
+  /* 56-day shortcut – red tones */
+  .dv-fill-leo-sc { background: #c03050; }
+  .dv-fill-llo-sc { background: rgba(192,48,80,0.55); outline: 1px solid rgba(192,48,80,0.7); }
+
+  /* 33-day extreme – dark red tones */
+  .dv-fill-leo-ex { background: #7a1206; }
+  .dv-fill-llo-ex { background: rgba(122,18,6,0.5); outline: 1px solid rgba(122,18,6,0.7); }
 
   .dv-val {
     font-family: 'JetBrains Mono', monospace;
     font-size: 10px;
     font-weight: 700;
     color: #fff;
-    padding-left: 6px;
+    padding-left: 7px;
     white-space: nowrap;
+    position: relative;
+    z-index: 3;
   }
 
-  .dv-val.outside {
+  /* label outside bar for very short bars */
+  .dv-val-out {
     position: absolute;
     left: calc(100% + 6px);
     color: var(--ink);
@@ -508,12 +554,11 @@
     white-space: nowrap;
   }
 
-  .dv-scale-label {
+  .dv-neutral {
     font-family: 'JetBrains Mono', monospace;
-    font-size: 9px;
-    color: var(--ink-dim);
-    margin-top: 8px;
-    padding-left: 46px;
+    font-size: 10px;
+    color: var(--accent);
+    white-space: nowrap;
   }
 
   .dv-divider {
@@ -921,38 +966,62 @@
 
     <!-- ΔV bar chart -->
     <div class="dv-wrap">
-      <div class="dv-chart-block">
-        <div class="dv-chart-header">
-          <span class="dv-chart-title">Departure ΔV from each staging point (km/s)</span>
-          <div class="dv-legend">
-            <span class="legend-dot leo-dot"></span><span>From LEO</span>
-            <span class="legend-dot llo-dot"></span><span>From LLO (Moon)</span>
-          </div>
+
+      <div class="dv-chart-header">
+        <div>
+          <span class="dv-chart-title">Departure ΔV from each staging point</span>
+          <div class="dv-axis-note">Longer bar = more ΔV required &nbsp;·&nbsp; scale: 0 → 25 km/s &nbsp;·&nbsp; <strong style="color:var(--accent)">assumes lunar-sourced propellant</strong></div>
+        </div>
+        <div class="dv-legend">
+          <span class="legend-dot leo-dot"></span><span>From LEO</span>
+          <span class="legend-dot llo-dot"></span><span>From Moon (LLO)</span>
+        </div>
+      </div>
+
+      <!-- grid lines overlay — drawn behind bars via CSS -->
+      <div class="dv-grid-wrap">
+
+        <!-- tick labels -->
+        <div class="dv-ticks">
+          <span style="left:0%">0</span>
+          <span style="left:20%">5</span>
+          <span style="left:40%">10</span>
+          <span style="left:60%">15</span>
+          <span style="left:80%">20</span>
+          <span style="left:100%">25 km/s</span>
         </div>
 
         <!-- Scenario 1: Hohmann -->
         <div class="dv-scenario">
           <div class="dv-scenario-header">
             <span class="dv-scenario-name">Hohmann transfer</span>
-            <span class="dv-scenario-tag hohmann-tag">baseline · ~259 days</span>
+            <span class="dv-scenario-tag hohmann-tag">baseline · ~259 days one-way</span>
           </div>
           <div class="dv-bar-group">
             <div class="dv-bar-row">
               <span class="dv-origin">LEO</span>
               <div class="dv-track">
-                <div class="dv-fill dv-leo" style="width:14.4%">
-                  <span class="dv-val">3.6</span>
+                <div class="dv-grid-line" style="left:20%"></div>
+                <div class="dv-grid-line" style="left:40%"></div>
+                <div class="dv-grid-line" style="left:60%"></div>
+                <div class="dv-grid-line" style="left:80%"></div>
+                <div class="dv-fill dv-fill-leo-hoh" style="width:14.4%">
+                  <span class="dv-val dv-val-out">3.6</span>
                 </div>
               </div>
             </div>
             <div class="dv-bar-row">
               <span class="dv-origin">LLO</span>
               <div class="dv-track">
-                <div class="dv-fill dv-llo" style="width:5.2%">
-                  <span class="dv-val outside">1.3</span>
+                <div class="dv-grid-line" style="left:20%"></div>
+                <div class="dv-grid-line" style="left:40%"></div>
+                <div class="dv-grid-line" style="left:60%"></div>
+                <div class="dv-grid-line" style="left:80%"></div>
+                <div class="dv-fill dv-fill-llo-hoh" style="width:5.2%">
+                  <span class="dv-val dv-val-out">1.3</span>
                 </div>
               </div>
-              <span class="dv-saving">↓ LLO saves 2.3 km/s</span>
+              <span class="dv-saving">✓ Moon saves 2.3 km/s · propellant free from Earth</span>
             </div>
           </div>
         </div>
@@ -969,7 +1038,11 @@
             <div class="dv-bar-row">
               <span class="dv-origin">LEO</span>
               <div class="dv-track">
-                <div class="dv-fill dv-leo dv-shortcut-fill" style="width:49.6%">
+                <div class="dv-grid-line" style="left:20%"></div>
+                <div class="dv-grid-line" style="left:40%"></div>
+                <div class="dv-grid-line" style="left:60%"></div>
+                <div class="dv-grid-line" style="left:80%"></div>
+                <div class="dv-fill dv-fill-leo-sc" style="width:49.6%">
                   <span class="dv-val">12.4</span>
                 </div>
               </div>
@@ -977,11 +1050,15 @@
             <div class="dv-bar-row">
               <span class="dv-origin">LLO</span>
               <div class="dv-track">
-                <div class="dv-fill dv-llo dv-shortcut-fill-llo" style="width:57.6%">
+                <div class="dv-grid-line" style="left:20%"></div>
+                <div class="dv-grid-line" style="left:40%"></div>
+                <div class="dv-grid-line" style="left:60%"></div>
+                <div class="dv-grid-line" style="left:80%"></div>
+                <div class="dv-fill dv-fill-llo-sc" style="width:57.6%">
                   <span class="dv-val">14.4</span>
                 </div>
               </div>
-              <span class="dv-penalty">↑ LLO costs +2.0 km/s more</span>
+              <span class="dv-neutral">~ +2.0 km/s ΔV, but propellant mass sourced locally</span>
             </div>
           </div>
         </div>
@@ -998,7 +1075,11 @@
             <div class="dv-bar-row">
               <span class="dv-origin">LEO</span>
               <div class="dv-track">
-                <div class="dv-fill dv-leo dv-extreme-fill" style="width:87.6%">
+                <div class="dv-grid-line" style="left:20%"></div>
+                <div class="dv-grid-line" style="left:40%"></div>
+                <div class="dv-grid-line" style="left:60%"></div>
+                <div class="dv-grid-line" style="left:80%"></div>
+                <div class="dv-fill dv-fill-leo-ex" style="width:87.6%">
                   <span class="dv-val">21.9</span>
                 </div>
               </div>
@@ -1006,29 +1087,33 @@
             <div class="dv-bar-row">
               <span class="dv-origin">LLO</span>
               <div class="dv-track">
-                <div class="dv-fill dv-llo dv-extreme-fill-llo" style="width:100%">
+                <div class="dv-grid-line" style="left:20%"></div>
+                <div class="dv-grid-line" style="left:40%"></div>
+                <div class="dv-grid-line" style="left:60%"></div>
+                <div class="dv-grid-line" style="left:80%"></div>
+                <div class="dv-fill dv-fill-llo-ex" style="width:100%">
                   <span class="dv-val">25.0</span>
                 </div>
               </div>
-              <span class="dv-penalty">↑ LLO costs +3.1 km/s more</span>
+              <span class="dv-neutral">~ +3.1 km/s ΔV, but no Earth-launch propellant cost</span>
             </div>
           </div>
-          <div class="dv-scale-label">0 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 5 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 10 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 15 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 20 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 25 km/s</div>
         </div>
-      </div>
+
+      </div><!-- /dv-grid-wrap -->
     </div>
 
     <!-- Oberth callout -->
     <div class="oberth-box">
-      <div class="oberth-icon">⚡</div>
+      <div class="oberth-icon">🌕</div>
       <div>
-        <strong>Why the Moon makes high-energy departures worse: the Oberth effect.</strong>
-        For slow Hohmann transfers, the Moon's shallow gravity well is a gift — you're already mostly free of Earth. But for the 2031 shortcut's extreme velocities, burning deep in Earth's gravity well at high speed (LEO) converts fuel into kinetic energy far more efficiently. The higher the required v∞, the bigger the LEO advantage — up to 3+ km/s for the extreme case. Lunar staging only helps if propellant can be sourced from the Moon to offset the penalty.
+        <strong>With lunar propellant, the Oberth penalty becomes an economic wash — or better.</strong>
+        The ΔV numbers don't change: LLO departures still cost 2–3 km/s more than LEO for the shortcut trajectories due to the Oberth effect. But if that propellant is mined from lunar ice rather than launched from Earth's surface, the mass economics reverse dramatically. Lifting 1 kg of propellant from Earth to LEO costs roughly <strong>$2,000–6,000</strong> at current launch prices. Sourcing it from the Moon avoids that cost entirely — meaning the "penalty" in km/s buys a far larger saving in launch mass and mission cost. For the 56-day NTP case, lunar staging with local propellant is likely the only architecturally viable path.
       </div>
     </div>
 
     <!-- Propulsion systems -->
-    <div class="prop-header">Propulsion capability match</div>
+    <div class="prop-header">Propulsion capability · lunar propellant assumed</div>
     <div class="prop-grid">
 
       <div class="prop-card prop-chem">
@@ -1038,11 +1123,11 @@
         </div>
         <div class="prop-engine">LH₂/LOX · e.g. RL-10, J-2X</div>
         <div class="prop-can">
-          <div class="prop-row can">✓ Hohmann transfer</div>
+          <div class="prop-row can">✓ Hohmann — strongly preferred</div>
           <div class="prop-row cannot">✗ 56-day shortcut</div>
           <div class="prop-row cannot">✗ 33-day extreme</div>
         </div>
-        <div class="prop-note">Mass ratio becomes untenable above ~4–5 km/s departure ΔV</div>
+        <div class="prop-note">Lunar LH₂/LOX is the most tractable ISRU product. With free propellant, Hohmann from LLO becomes the cheapest Mars mission architecture possible — lower ΔV and zero Earth-launch propellant cost.</div>
       </div>
 
       <div class="prop-card prop-ntp">
@@ -1053,10 +1138,10 @@
         <div class="prop-engine">NTP · e.g. NERVA heritage, DRACO</div>
         <div class="prop-can">
           <div class="prop-row can">✓ Hohmann transfer</div>
-          <div class="prop-row can">✓ 56-day feasible shortcut</div>
+          <div class="prop-row can">✓ 56-day feasible shortcut ★</div>
           <div class="prop-row cannot">✗ 33-day extreme</div>
         </div>
-        <div class="prop-note">Halves propellant mass vs chemical. Under development by DARPA/NASA. Must stage from high lunar orbit.</div>
+        <div class="prop-note">★ Best-fit architecture. NTP's high Isp means less propellant needed per km/s, and lunar LH₂ is the ideal NTP propellant. The +2.0 km/s LLO Oberth penalty is far outweighed by avoiding ~100+ tonnes of Earth-launched fuel.</div>
       </div>
 
       <div class="prop-card prop-adv">
@@ -1070,7 +1155,7 @@
           <div class="prop-row can">✓ 56-day feasible shortcut</div>
           <div class="prop-row can">✓ 33-day extreme (theoretical)</div>
         </div>
-        <div class="prop-note">Souza explicitly notes the 33-day case illustrates "what future high-specific-impulse systems could achieve."</div>
+        <div class="prop-note">With lunar propellant and high Isp, even the 33-day extreme case becomes architecturally conceivable — propellant mass fractions drop enough that the +3.1 km/s LLO penalty is a minor line item versus the launch cost savings.</div>
       </div>
 
     </div>
@@ -1079,7 +1164,8 @@
 
   <footer>
     SOURCE · Souza, M. de O. (2026). "Using asteroid early orbital data for rapid Mars missions." <em>Acta Astronautica.</em> DOI: 10.1016/j.actaastro.2026.04.018 &nbsp;·&nbsp;
-    ΔV values for LEO/LLO departure computed from patched-conic approximation using paper's published v∞ figures &nbsp;·&nbsp;
+    ΔV values computed from patched-conic approximation using paper's published v∞ figures &nbsp;·&nbsp;
+    Propulsion analysis assumes lunar-sourced LH₂/LOX propellant (ISRU from polar ice) &nbsp;·&nbsp;
     DIAGRAMS ARE SCHEMATIC · Distances and angles compressed for clarity.
   </footer>
 
